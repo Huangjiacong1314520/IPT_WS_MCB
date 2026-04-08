@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\edma">
+      <UniqueIdentifier>{72e5c2e8-d524-4b24-952e-5f87d6ae372d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\timer">
+      <UniqueIdentifier>{f1c9e362-53f0-4874-adb8-af1bbb1c9bf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\srio">
+      <UniqueIdentifier>{307301f4-a7ce-42fe-8c85-df85c6834ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\nand">
+      <UniqueIdentifier>{6be39b65-dbed-431e-a296-17a90b14833b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\cache">
+      <UniqueIdentifier>{ebfd1c4b-3919-47e4-8dcd-e2a252ca3e8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\emif">
+      <UniqueIdentifier>{856b054b-2968-4a2f-94f1-7b3507bced8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\intc">
+      <UniqueIdentifier>{2348b338-fb79-48f0-8fc6-ef508aa6a599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\gpio">
+      <UniqueIdentifier>{0e0506ec-5858-4c8c-84de-f68bd32fb394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ipc">
+      <UniqueIdentifier>{ca64e43c-9b27-491b-9e32-2a0dc2d43bec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\nand">
+      <UniqueIdentifier>{cf2d0953-6a86-4e48-a384-2759d2bdc4d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\cache">
+      <UniqueIdentifier>{979dd6ef-c37d-448a-ae10-746d659e2891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\srio">
+      <UniqueIdentifier>{83822790-40c2-4059-ac6c-ebac7fb2b8e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\uart">
+      <UniqueIdentifier>{3d4ef0a0-2370-4867-947b-74d686b18304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\spiflash">
+      <UniqueIdentifier>{74f441de-f05b-4704-900c-9a611139b841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\timer">
+      <UniqueIdentifier>{e7f1bcbe-2c23-4e7f-ac18-44e22e8ffad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\psc">
+      <UniqueIdentifier>{a11b028d-4a32-4c8a-8d06-4f697037850f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\pll">
+      <UniqueIdentifier>{b2fb7c26-f1b6-4bb8-aa4f-997a9722e254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\edma">
+      <UniqueIdentifier>{de51329b-661f-4e8b-929c-a72e7b39a16f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\char_decimal1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interfacedrive.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TestDriver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EDMA3\edma.h">
+      <Filter>头文件\edma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cache\csl_cache.h">
+      <Filter>头文件\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cache\csl_cacheAux.h">
+      <Filter>头文件\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cache\csl_xmc.h">
+      <Filter>头文件\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cache\csl_xmcAux.h">
+      <Filter>头文件\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\srio\srio.h">
+      <Filter>头文件\srio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Timer\timer.h">
+      <Filter>头文件\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hw_C6678.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_cache.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_edma3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_emif.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_gpio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_intc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_ipc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_nand.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_pll.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_psc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_spiflash.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_srio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_timer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\drv_uart.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ec1900.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\main.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TestDriver.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EDMA3\API_EDMA3.c">
+      <Filter>源文件\edma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EDMA3\edma.c">
+      <Filter>源文件\edma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\intc\API_intc.c">
+      <Filter>源文件\intc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gpio\API_gpio.c">
+      <Filter>源文件\gpio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ipc\API_ipc.c">
+      <Filter>源文件\ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\nand\API_nand.c">
+      <Filter>源文件\nand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pll\API_pll.c">
+      <Filter>源文件\pll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\psc\API_psc.c">
+      <Filter>源文件\psc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Timer\API_timer.c">
+      <Filter>源文件\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Timer\timer.c">
+      <Filter>源文件\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\spi\API_spiflash.c">
+      <Filter>源文件\spiflash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\uart\API_uart.c">
+      <Filter>源文件\uart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\srio\API_srio.c">
+      <Filter>源文件\srio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\srio\srio.c">
+      <Filter>源文件\srio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cache\API_cache.c">
+      <Filter>源文件\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interfacedrive.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\emif\API_EMIF.c">
+      <Filter>源文件\emif</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\C6678.cmd">
+      <Filter>源文件</Filter>
+    </None>
+  </ItemGroup>
+</Project>

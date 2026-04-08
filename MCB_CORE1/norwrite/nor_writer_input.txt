@@ -1,0 +1,5 @@
+file_name  = app.bin
+start_addr = 1048576
+
+
+

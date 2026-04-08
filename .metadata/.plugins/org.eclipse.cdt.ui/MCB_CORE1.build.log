@@ -1,0 +1,8 @@
+
+****项目 MCB_CORE1 配置 Debug 中的 构建****
+
+"C:\\ti\\ccs1210\\ccs\\utils\\bin\\gmake" -k -j 12 Debug -O 
+ 
+gmake: *** No rule to make target 'Debug'.
+
+**** Build Finished ****

@@ -1,0 +1,543 @@
+/*
+ * srio_debug.c
+ *
+ *  Created on: 2021年4月14日
+ *      Author: zhty
+ */
+#include  "../include/hw_srio.h"
+#include "hw_soc_c6678.h"
+#include "srio_debug.h"
+#include <stdio.h>
+
+//#ifndef  SRIO_SHOW_ALL_MSG
+//#define  SRIO_SHOW_ALL_MSG    //包含某些正常消息
+//#endif
+
+void  SRIO_LogicalTransportErrorStatus()
+{
+    unsigned  uiErrorStatus = 0, uiLogiTransError = 0;
+
+    printf("----Logical Status: \n");
+    //Error, Reset, and Special Event Interrupt Condition Status Register
+    uiLogiTransError = HWREG(SOC_SRIO_0_REGS + SRIO_ERR_RST_EVNT_ICSR);
+    if(uiLogiTransError)
+     {
+            uiErrorStatus= (uiLogiTransError& SRIO_ERR_RST_EVNT_ICSR_DEVICE_RST_INT_MASK)>>
+                SRIO_ERR_RST_EVNT_ICSR_DEVICE_RST_INT_SHIFT;
+            if(1==uiErrorStatus)
+                printf("Device reset interrupt received from any port\n");
+
+            uiErrorStatus= (uiLogiTransError& SRIO_ERR_RST_EVNT_ICSR_PORT3_ERR_MASK)>>
+                SRIO_ERR_RST_EVNT_ICSR_PORT3_ERR_SHIFT;
+            if(1==uiErrorStatus)
+                printf("Error detected on port 3\n");
+
+            uiErrorStatus= (uiLogiTransError& SRIO_ERR_RST_EVNT_ICSR_PORT2_ERR_MASK)>>
+                SRIO_ERR_RST_EVNT_ICSR_PORT2_ERR_SHIFT;
+            if(1==uiErrorStatus)
+                printf("Error detected on port 2\n");
+
+            uiErrorStatus= (uiLogiTransError& SRIO_ERR_RST_EVNT_ICSR_PORT1_ERR_MASK)>>
+                SRIO_ERR_RST_EVNT_ICSR_PORT1_ERR_SHIFT;
+            if(1==uiErrorStatus)
+                printf("Error detected on port 1\n");
+
+            uiErrorStatus= (uiLogiTransError& SRIO_ERR_RST_EVNT_ICSR_PORT0_ERR_MASK)>>
+                SRIO_ERR_RST_EVNT_ICSR_PORT0_ERR_SHIFT;
+            if(1==uiErrorStatus)
+                printf("Error detected on port 0\n");
+
+            uiErrorStatus= (uiLogiTransError& SRIO_ERR_RST_EVNT_ICSR_LLERR_CAPTURE_MASK)>>
+               SRIO_ERR_RST_EVNT_ICSR_LLERR_CAPTURE_SHIFT;
+            if(1==uiErrorStatus)
+                printf("Logical layer error management event capture detected\n");
+
+            uiErrorStatus= (uiLogiTransError& SRIO_ERR_RST_EVNT_ICSR_PORT_WRITE_IN_RECEIVED_MASK)>>
+                SRIO_ERR_RST_EVNT_ICSR_PORT_WRITE_IN_RECEIVED_SHIFT;
+            if(1==uiErrorStatus)
+                printf("Port-write-in request received on any port\n");
+
+            uiErrorStatus= (uiLogiTransError& SRIO_ERR_RST_EVNT_ICSR_MCAST_INT_RECEIVED_MASK)>>
+                SRIO_ERR_RST_EVNT_ICSR_MCAST_INT_RECEIVED_SHIFT;
+            if(1==uiErrorStatus)
+                printf("Multi-cast event control symbol interrupt received on any port\n");
+
+            //Clear the error
+            HWREG(SOC_SRIO_0_REGS + SRIO_ERR_RST_EVNT_ICCR) = 0xFFFFFFFF;
+    }
+
+    //Logical/Transport Layer Error Detect
+    uiLogiTransError = HWREG(SOC_SRIO_0_REGS + SRIO_ERR_DET);
+    if (uiLogiTransError)
+    {
+        uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_IO_ERR_RESP_MASK)>>
+                    SRIO_ERR_DET_IO_ERR_RESP_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("An LSU received an ERROR response to an I/O logical layer request. To clear this bit, write 0 to it\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_MSG_ERR_RESP_MASK)>>
+                   SRIO_ERR_DET_MSG_ERR_RESP_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The RXU received an ERROR response to a message logical layer request. To clear this bit, write 0 to it.\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_MSG_FMT_ERR_MASK)>>
+                    SRIO_ERR_DET_MSG_FMT_ERR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The RXU received a message data payload with an invalid size or segment. To clear this bit, write 0 to it.\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_ILL_TRANS_DECODE_MASK)>>
+                   SRIO_ERR_DET_ILL_TRANS_DECODE_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("Received illegal fields in the response/request packet for an IO/message transaction. To clear this bit, write 0 to it.\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_MSG_REQ_TIMEOUT_MASK)>>
+                    SRIO_ERR_DET_MSG_REQ_TIMEOUT_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("A timeout has been detected by the RXU. A required message request has not been received by the RXU within the specified time-out interval. To clear this bit, write 0 to it.\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_PKT_RESP_TIMEOUT_MASK)>>
+                    SRIO_ERR_DET_PKT_RESP_TIMEOUT_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("A timeout has been detected by an LSU or the TXU. A required response has not been received by the LSU/TXU within the specified timeout interval. To clear this bit, write 0 to it.\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_UNSOLICITED_RESP_MASK)>>
+                    SRIO_ERR_DET_UNSOLICITED_RESP_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("An unsolicited response packet has been received by an LSU or the TXU. To clear this bit, write 0 to it.\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_UNSUPPORTED_TRANS_MASK)>>
+                    SRIO_ERR_DET_UNSUPPORTED_TRANS_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The MAU has received an unsupported transaction. That is, the MAU received a transaction that is not supported in the destination operations CAR. To clear this bit, write 0 to it.\n");
+
+                uiErrorStatus= (uiLogiTransError&SRIO_ERR_DET_PDU_LEN_ERR_MASK )>>
+                    SRIO_ERR_DET_PDU_LEN_ERR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("Data streaming PDU length error\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_SHORT_STREAM_SEG_MASK)>>
+                    SRIO_ERR_DET_SHORT_STREAM_SEG_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("Short data streaming segment error\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_LONG_STREAM_SEG_MASK)>>
+                    SRIO_ERR_DET_LONG_STREAM_SEG_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("Long data streaming segment error\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_OPEN_STREAM_CONTEXT_MASK)>>
+                    SRIO_ERR_DET_OPEN_STREAM_CONTEXT_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("Open existing data streaming context error\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_MISSING_STREAM_CONTEXT_MASK)>>
+                    SRIO_ERR_DET_MISSING_STREAM_CONTEXT_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("Missing data streaming context error\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_CPPI_SECURITY_VIOLATION_MASK)>>
+                    SRIO_ERR_DET_CPPI_SECURITY_VIOLATION_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The RXU has detected an access block. That is, access to one of the RX queues was blocked. To clear this bit, write 0 to it.\n");
+
+                uiErrorStatus= (uiLogiTransError& SRIO_ERR_DET_RX_DMA_ERR_MASK)>>
+                    SRIO_ERR_DET_RX_DMA_ERR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("A DMA access to the MAU was blocked. To clear this bit, write 0 to it.\n");
+
+            printf("Logical/Transport Layer High Address Capture: 0x%x\n", HWREG(SOC_SRIO_0_REGS + SRIO_H_ADDR_CAPT));
+            printf("Logical/Transport Layer Address Capture: 0x%x\n",         HWREG(SOC_SRIO_0_REGS + SRIO_ADDR_CAPT));
+            printf("Logical/Transport Layer Device ID Capture: 0x%x\n",       (HWREG(SOC_SRIO_0_REGS +SRIO_ID_CAPT)));
+            printf("Logical/Transport Layer Control Capture: 0x%x\n",          HWREG(SOC_SRIO_0_REGS +SRIO_CTRL_CAPT));
+
+                //Clear the error
+            HWREG(SOC_SRIO_0_REGS +SRIO_ERR_DET) = 0;
+    }
+}
+
+
+void SRIO_PhysicalPortErrorStatus( )
+{
+    unsigned uiErrorStatus, uiPortError;
+    int  i;
+    int  iMaxPortNum = 4;
+    printf("----Physical Status: \n");
+
+        for(i=0; i< iMaxPortNum; i++)
+        {
+            if(0 == HWREG(SOC_SRIO_0_REGS + SRIO_BLK_EN(i + 5)) )  //未使能的
+                continue;
+
+            printf("----port %d: \n", i);
+            //Port Error and Status
+           uiPortError = HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_STAT(i)) ;
+           if(2 != uiPortError)
+           {
+               uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_PORT_UNINIT_MASK)>>SRIO_SP_ERR_STAT_PORT_UNINIT_SHIFT;
+               if(1==uiErrorStatus)
+               {
+#ifdef  SRIO_SHOW_ALL_MSG
+                   printf("Input and output port %d are not initialized.\n", i);
+#endif
+                   continue; //TODO  待确认
+               }
+           }
+#ifdef  SRIO_SHOW_ALL_MSG
+            //Port Local AckID Status
+            uiPortStatus = HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ACKID_STAT(i))   ;
+            uiErrorStatus= (uiPortStatus&  SRIO_SP_ACKID_STAT_INB_ACKID_MASK)>> SRIO_SP_ACKID_STAT_INB_ACKID_SHIFT;
+            printf("Input port %d next expected ackID value: 0x%x\n", i, uiErrorStatus);
+            uiErrorStatus= (uiPortStatus& SRIO_SP_ACKID_STAT_OUTSTD_ACKID_MASK)>>SRIO_SP_ACKID_STAT_OUTSTD_ACKID_SHIFT;
+            printf("Output port %d unacknowledged ackID: 0x%x\n", i, uiErrorStatus);
+            uiErrorStatus= (uiPortStatus&SRIO_SP_ACKID_STAT_OUTB_ACKID_MASK)>>SRIO_SP_ACKID_STAT_OUTB_ACKID_SHIFT;
+            printf("Output port %d next transmitted ackID value: 0x%x\n", i, uiErrorStatus);
+#endif
+
+            //Port Error and Status
+           uiPortError = HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_STAT(i)) ;
+            if(2 != uiPortError)
+            {
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_OUTPUT_DROP_MASK)>>SRIO_SP_ERR_STAT_OUTPUT_DROP_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The output port %d has discarded a packet.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_OUTPUT_FAIL_MASK)>>SRIO_SP_ERR_STAT_OUTPUT_FAIL_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The output port %d has encountered a failed condition. The failed port error threshold has been reached in the Port n Error Rate Threshold Register.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_OUTPUT_DEGR_MASK)>>SRIO_SP_ERR_STAT_OUTPUT_DEGR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The output port %d has encountered a degraded condition. The degraded port error threshold has been reached in the Port n Error Rate Threshold Register.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_OUTPUT_RETRY_MASK)>>SRIO_SP_ERR_STAT_OUTPUT_RETRY_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The output port %d has encountered a retry condition. This bit is set when bit 18 is set.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_OUTPUT_RETRIED_MASK)>>SRIO_SP_ERR_STAT_OUTPUT_RETRIED_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The output port %d has received a packet-retry control symbol and cannot make forward progress. This bit is set when bit 18 is set and is cleared when a packet-accepted or packet-not-accepted control symbol is received.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_OUTPUT_RETRY_STOPPED_MASK)>> SRIO_SP_ERR_STAT_OUTPUT_RETRY_STOPPED_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The output port %d has received a packet-retry control symbol and is in the output retry-stopped state.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_OUTPUT_ERR_MASK)>>SRIO_SP_ERR_STAT_OUTPUT_ERR_SHIFT;
+#ifdef  SRIO_SHOW_ALL_MSG
+                //未Link到其他设备时会打印这个信息
+                if(1==uiErrorStatus) //输入或者输出端口遇到一个硬件无法恢复的错误，主要是指link-response未收到或者收到错误response
+                    printf("The output port %d has encountered (and possibly recovered from) a transmission error. This bit is set when bit 16 is set.\n", i);
+#endif
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_OUTPUT_ERR_STOPPED_MASK)>> SRIO_SP_ERR_STAT_OUTPUT_ERR_STOPPED_SHIFT;
+                if(1==uiErrorStatus)
+                {
+                    printf("The output port %d is in the output error-stopped state.\n", i);
+//                    HWREG(SOC_SRIO_0_REGS + SRIO_SPn_LM_REQ(i))  = 3;
+                    //wait for link response
+//                    while(0==(  HWREG(SOC_SRIO_0_REGS + SRIO_SPn_LM_RESP(i)) >> (31) ))
+//                        ;
+                }
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_INPUT_RETRY_STOPPED_MASK)>> SRIO_SP_ERR_STAT_INPUT_RETRY_STOPPED_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The input port %d is in the input retry-stopped state.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_INPUT_ERR_ENCTR_MASK)>> SRIO_SP_ERR_STAT_INPUT_ERR_ENCTR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The input port %d has encountered (and possibly recovered from) a transmission error. This bit is set when bit 8 is set.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_INPUT_ERR_STOPPED_MASK)>>SRIO_SP_ERR_STAT_INPUT_ERR_STOPPED_SHIFT;
+                if(1==uiErrorStatus)
+                {
+                    printf("The input port %d is in the input error-stopped state.\n", i);
+//                    HWREG(SOC_SRIO_0_REGS + SRIO_SPn_LM_REQ(i))  = 3;
+                    //wait for link response
+//                    while(0==(  HWREG(SOC_SRIO_0_REGS + SRIO_SPn_LM_RESP(i)) >> (31) ))
+//                        ;
+                }
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_PORT_WRITE_PEND_MASK)>> SRIO_SP_ERR_STAT_PORT_WRITE_PEND_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d has encountered a condition which required it to initiate a Maintenance Port-write operation.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_PORT_ERR_MASK)>>SRIO_SP_ERR_STAT_PORT_ERR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The input or output port %d has encountered an error from which hardware was unable to recover.\n", i);
+
+#if   0          //def  SRIO_SHOW_ALL_MSG        //正常情况, 不打印
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_STAT_PORT_OK_MASK)>>SRIO_SP_ERR_STAT_PORT_OK_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("Port %d OK condition. The input and output ports are initialized, and the port is exchanging error-free control symbols with the attached device.\n", i);
+#endif
+
+
+                //Clear the error
+                HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_STAT(i)) = 0xFFFFFFFF;
+            }
+
+            //Port Error Detect
+            uiPortError = HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_DET(i)) ;
+            if(uiPortError)
+            {
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_CS_CRC_ERR_MASK)>> SRIO_SP_ERR_DET_CS_CRC_ERR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received a control symbol with a bad CRC value.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_CS_ILL_ID_MASK)>>  SRIO_SP_ERR_DET_CS_ILL_ID_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received an acknowledge control symbol with an unexpected ackID (packet-accepted or packet-retry). The capture registers do not have valid information during this error detection.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_CS_NOT_ACC_MASK)>> SRIO_SP_ERR_DET_CS_NOT_ACC_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received a packet-not-accepted acknowledge control symbol: %x\n", i,  HWREG(SOC_SRIO_0_REGS + SRIO_PLM_SP_LONG_CS_TX1(i)));
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_PKT_ILL_ACKID_MASK)>> SRIO_SP_ERR_DET_PKT_ILL_ACKID_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received a packet with unexpected/out-of-sequence ackID.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_PKT_CRC_ERR_MASK)>> SRIO_SP_ERR_DET_PKT_CRC_ERR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received a packet with a bad CRC value.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_PKT_ILL_SIZE_MASK)>> SRIO_SP_ERR_DET_PKT_ILL_SIZE_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received packet that exceeds the maximum allowed size.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_LR_ACKID_ILL_MASK)>> SRIO_SP_ERR_DET_LR_ACKID_ILL_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received a link response with an ackID that is not outstanding. The capture registers do not have valid information during this error detection.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_PROT_ERR_MASK)>>  SRIO_SP_ERR_DET_PROT_ERR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received an unexpected packet or control symbol: %x\n", i, HWREG(SOC_SRIO_0_REGS + SRIO_PLM_SP_LONG_CS_TX1(i)));
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_DELIN_ERR_MASK)>>  SRIO_SP_ERR_DET_DELIN_ERR_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d detected a delineation error. The port received an unaligned /SC/ or /PD/ or undefined code-group. The capture registers do not have valid information during this error detection.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_CS_ACK_ILL_MASK)>> SRIO_SP_ERR_DET_CS_ACK_ILL_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d received an unexpected acknowledge control symbol.\n", i);
+
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_DET_LINK_TO_MASK)>>  SRIO_SP_ERR_DET_LINK_TO_SHIFT;
+                if(1==uiErrorStatus)
+                    printf("The port %d experienced a link timeout. The port did not receive an acknowledge or link-response control symbol within the specified time-out interval. The capture registers do not have valid information during this error detection.\n", i);
+
+
+#if  0 //SRIO_SHOW_ALL_MSG
+                uiPortError = HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_ATTR_CAPT(i)) ;//SPx_ERR_ATTR_CAPT_DBG0
+                uiErrorStatus= (uiPortError& SRIO_SP_ERR_ATTR_CAPT_VAL_CAPT_MASK)>> SRIO_SP_ERR_ATTR_CAPT_VAL_CAPT_SHIFT;
+                if(uiErrorStatus)
+                {
+                    uiErrorStatus= (uiPortError& SRIO_SP_ERR_ATTR_CAPT_INFO_TYPE_MASK)>> SRIO_SP_ERR_ATTR_CAPT_INFO_TYPE_SHIFT;
+                    printf("Type of information logged: %d (0 - packet, 1 - control symbol)\n", uiErrorStatus);
+                    uiErrorStatus= (uiPortError& SRIO_SP_ERR_ATTR_CAPT_ERR_TYPE_MASK)>> SRIO_SP_ERR_ATTR_CAPT_ERR_TYPE_SHIFT;
+                    printf("captured error bit in the Port Error Detect Register: %d\n", uiErrorStatus);
+
+                    printf("control symbol or Bytes 0 to 3 of the packet header that correspond to the error: 0x%x\n",HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_CAPT_0(i) ) );
+                    printf("Bytes 4 to 7 of the packet header that corresponds to the error: 0x%x\n",     HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_CAPT_1(i) ) );
+                    printf("Bytes 8 to 11 of the packet header that corresponds to the error: 0x%x\n",   HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_CAPT_2(i) ) );
+                    printf("Bytes 12 to 15 of the packet header that corresponds to the error: 0x%x\n", HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_CAPT_3(i) ) );
+                }
+#endif
+                //Clear the error
+                HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_DET(i)) = 0;
+                HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_ATTR_CAPT(i)) = 0;
+            }
+
+            //Lane state
+            uiPortError = HWREG(SOC_SRIO_0_REGS + SRIO_LANEn_STAT0(i));
+
+            uiErrorStatus= (uiPortError& SRIO_LANE_STAT0_RX_SYNC_MASK)>> SRIO_LANE_STAT0_RX_SYNC_SHIFT;
+            if(1!=uiErrorStatus)
+                printf("lane %d receiver does achieve lane synchronization.\n", i);
+
+            uiErrorStatus= ((uiPortError& SRIO_LANE_STAT0_ERR_CNT_MASK)>> SRIO_LANE_STAT0_ERR_CNT_SHIFT);
+            if(uiErrorStatus)
+               printf("Count of  8b/10b decoding error have occurred :%d\n", uiErrorStatus);//不影响
+
+        }
+}
+
+
+void  SRIO_PrintErrorStatus()
+{
+    SRIO_LogicalTransportErrorStatus();
+    SRIO_PhysicalPortErrorStatus();
+}
+
+void  SRIO_InitErrManageRegs()
+{
+        HWREG(SOC_SRIO_0_REGS + SRIO_ERR_RST_EVNT_ICCR) |= 0x10F07;
+        //HWREG(SOC_SRIO_0_REGS + SRIO_EM_MECS_STAT)        |= 0x00FF;
+
+        HWREG(SOC_SRIO_0_REGS + SRIO_ERR_RPT_BH)  = 0x30000007;//next ext=0x0000(last)
+        HWREG(SOC_SRIO_0_REGS + SRIO_ERR_DET)        &= 0x243FFF3F;  //clear
+        HWREG(SOC_SRIO_0_REGS + SRIO_H_ADDR_CAPT)= 0;//clear
+        HWREG(SOC_SRIO_0_REGS + SRIO_ADDR_CAPT)    &= 0x4;
+        HWREG(SOC_SRIO_0_REGS + SRIO_ID_CAPT)          = 0;//clear
+        HWREG(SOC_SRIO_0_REGS + SRIO_CTRL_CAPT)      = 0;
+        int i = 0;
+        for (;  i<4;  i++)
+        {
+            if (i == 1) continue;
+            HWREG(SOC_SRIO_0_REGS + SRIO_PortControl(i))  &=  ~(1 << 20);
+            HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_ATTR_CAPT(i)) &= 0x2000000E;
+            HWREG(SOC_SRIO_0_REGS + SRIO_PW_RX_CAPTn(i)) = 0;//clear
+            HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_DET(i))  &= 0x7F81BFC8;
+            //SP0_CTL, SP1_CTL, SP2_CTL,  SP3_CTL,
+            //HWREG(SOC_SRIO_0_REGS + SRIO_PortControl(i)) &= (~((1 << 3) | (1 <<2)));//当错误达到门限后,端口会继续传输报文（这个取决于Port Control CSR里面的Stop on和Drop Packet两个位域）
+        }
+
+
+}
+void  SRIO_EnableErrorCapture(unsigned char bEnable)
+{
+    if ( 0 == bEnable)
+    {
+        HWREG(SOC_SRIO_0_REGS + SRIO_ERR_EN )    = 0;   //disable
+    }
+    else if (1 == bEnable)
+    {
+        /*Enable specific error reporting, save and lock capture information
+                       in the appropriate Logical/Transport Layer Capture CSRs*/
+        HWREG(SOC_SRIO_0_REGS + SRIO_ERR_EN )    = 0xDFC07EC0;
+
+        int i = 0;
+        for ( ;  i < 4; i++)//4port
+        {
+            if(0 == HWREG(SOC_SRIO_0_REGS + SRIO_BLK_EN(i+5)) )  //未使能的
+                   continue;
+            //Enable error rate counting
+            HWREG(SOC_SRIO_0_REGS +SRIO_SPn_RATE_EN(i)) = (1<<0x1F)|(1<<0x16)|(1<<0x15)|(1<<0x14)|(1<<0x13)|(1<<0x12)|(1<<0x11)\
+        |(1<<0xe)|(1<<0x5)|(1<<0x4)|(1<<0x2)|(1<<0x1)|(1<<0x0);
+
+            //the threshold value for reporting an error condition
+            //Error Rate Failed Threshold Trigger, if enabled, 应大于degraded threshold trigger, 0为disable
+            HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_THRESH(i)) = (0x1<<0x18)  | (0x1<<0x10);//先清除
+            HWREG(SOC_SRIO_0_REGS + SRIO_SPn_ERR_THRESH(i)) = (0xFF<<0x18)  | (0xFE<<0x10);
+
+            /*clear error capture registers*/
+            HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_ATTR_CAPT(i))  = 0;
+            HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_CAPT_0(i) ) = 0;
+            HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_CAPT_1(i) ) = 0;
+            HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_CAPT_2(i) ) = 0;
+            HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_CAPT_3(i) ) = 0;
+
+            /*clear error rate counter*/
+            HWREG(SOC_SRIO_0_REGS +SRIO_SPn_ERR_RATE(i)) = 0;
+        }
+    }
+}
+
+void  SRIO_PrintDevStatus()
+{
+    int  i = 0;
+    int  iMaxPortNum = 4;
+    unsigned uiStatus = 0;
+        for(i=0; i< iMaxPortNum; i++)
+        {
+            if(0 == HWREG(SOC_SRIO_0_REGS + SRIO_BLK_EN(i +5)) )  //未使能的
+            {
+                printf("port %d disabled. \r\n", i+5);
+                continue;
+            }
+
+            //lane0的状态 SRIO_LANEn_STAT0 , p143 /233
+            uiStatus =   HWREG(SOC_SRIO_0_REGS + SRIO_LANEn_STAT0(i));
+            {
+                /**
+                 * 2x+1x+1x configuration, the 2x port uses lanes A and B and is numbered
+                    port 0; the 1x ports use C and D respectively and so are numbered 2 and 3,
+                 */
+                printf("lane %c belongs to port %d\r\n", i+65, (uiStatus >> 24));
+                /*
+                 *  -For 4 1x ports, the lanes A, B, C, and D are numbered 0, 1, 2 and 3 respectively
+                    -For a 2x using A&B as the 2x port, the 2x A and B port is numbered 0 and C and D are
+                    numbered 2 and 3, respectively
+                    -For a 2x using C&D as the 2x port, the 2x C and D port is numbered 2 and A and B are
+                    numbered 0 and 1, respectively
+                    -For 1 4x port, all lanes are numbered 0
+                 */
+                printf("lane %c within the port that this lane supports: %d\r\n", i+65, ((uiStatus & 0xF00000) >> 20));
+                //0 = Not in sync
+                //1 = Receiver has achieved lane_sync according to the specification
+                printf("lane %c : the receiver  achieved lane synchronization- %d\r\n", i+65, ((uiStatus & 0x2000) >> 13));
+
+            }
+            uiStatus =   HWREG(SOC_SRIO_0_REGS + SRIO_LANEn_STAT1(i));
+            {
+                if (uiStatus >>31)
+                    printf("lane%c:  IDLE2 sequence has been received at some time since the bit was cleared.\r\n", i+65);
+                else
+                    printf("lane%c:  No IDLE2 sequence has been received since the last time the bit was cleared\r\n", i+65);
+
+                 //Link Partner Port Width
+                 printf("lane%c : Link Partner Port Width:  %d lanes\r\n", i + 65, ((uiStatus & 0x7000000 ) >> 24)  );
+                 //Link Partner Lane Number status
+                 printf("lane%c : The lane within the link-partners port that this lane is associated with lane:  %d \r\n", i + 65, ((uiStatus & 0xF00000 ) >> 20)  );
+            }
+
+            //link_status   246,    table 3-85
+            uiStatus = HWREG(SOC_SRIO_0_REGS + SRIO_SPn_LM_RESP(i));
+            {
+             //   if (uiStatus & 0x00000010u ) //OK
+             //                   ;//printf("port %d Link-status field from the link-response control symbol:  OK\n", i) ;
+             //               else if (uiStatus & 0x00000002u) //Error
+             //                    printf("port %d Link-status field from the link-response control symbol:  error have occurred\n", i);
+             //               else  if (0x04 == (uiStatus & 0x00000001fu ) )
+             //                    printf("port %d Link-status field from the link-response control symbol:  Retry-stopped\n", i);
+             //               else if (0x05 == (uiStatus & 0x00000001fu ) )
+             //                    printf("port %d Link-status field from the link-response control symbol:  Error-stopped\n", i);
+            }
+
+
+            {
+                //port-Write status, 详情见Port Control Register CSR n Field Descriptions
+                uiStatus =  HWREG(SOC_SRIO_0_REGS + SRIO_PortControl(i))  &  (1 << 22);
+                if (uiStatus == 0 )
+                       printf("output port %d  is stopped and not enabled to issue any packets except to route or respond to I/O logical MAINTENANCE packets, depending upon the functionality of the processing element.\n", i);
+               // else
+               //     printf("output port %d is enabled to issue any packets. \n", i);
+                uiStatus =  HWREG(SOC_SRIO_0_REGS + SRIO_PortControl(i))  &  (1 << 21);
+                if (uiStatus == 0 )
+                      printf("input port %d  is stopped and not enabled to issue any packets except to route or respond to I/O logical MAINTENANCE packets, depending upon the functionality of the processing element.\n", i);
+               // else
+               //     printf("input port %d is enabled to issue any packets. \n", i);
+            }
+
+
+        }
+}
+
+void  SRIO_GetDeviceSpeedGrade()
+{
+#define DEVSPEED (*(unsigned int *)0x026203F8u)
+#define DEVSPEED_1000_MHZ_MASK_L  (1<<0)
+#define DEVSPEED_1200_MHZ_MASK_L  (1<<1)
+#define DEVSPEED_1250_MHZ_MASK_L  (1<<2)
+#define DEVSPEED_1400_MHZ_MASK_L  (1<<3)
+#define DEVSPEED_1400_MHZ_MASK_H  (1<<4)
+#define DEVSPEED_1250_MHZ_MASK_H  (1<<5)
+#define DEVSPEED_1200_MHZ_MASK_H  (1<<6)
+#define DEVSPEED_1000_MHZ_MASK_H  (1<<7)
+#define DEVSPEED_800_MHZ_MASK_H   (1<<8)
+
+       unsigned int uiDevSpeed, uiSpeedCode;
+
+        uiSpeedCode= (DEVSPEED& (0x1FFu<<23u))>>23u;
+
+        if(uiSpeedCode&DEVSPEED_800_MHZ_MASK_H)       uiDevSpeed= 800;
+        else if(uiSpeedCode&DEVSPEED_1000_MHZ_MASK_H) uiDevSpeed= 1000;
+        else if(uiSpeedCode&DEVSPEED_1200_MHZ_MASK_H) uiDevSpeed= 1200;
+        else if(uiSpeedCode&DEVSPEED_1250_MHZ_MASK_H) uiDevSpeed= 1250;
+        else if(uiSpeedCode&DEVSPEED_1400_MHZ_MASK_H) uiDevSpeed= 1400;
+        else if(uiSpeedCode&DEVSPEED_1400_MHZ_MASK_L) uiDevSpeed= 1400;
+        else if(uiSpeedCode&DEVSPEED_1250_MHZ_MASK_L) uiDevSpeed= 1250;
+        else if(uiSpeedCode&DEVSPEED_1200_MHZ_MASK_L) uiDevSpeed= 1200;
+        else if(uiSpeedCode&DEVSPEED_1000_MHZ_MASK_L) uiDevSpeed= 1000;
+        else                                          uiDevSpeed= 800;
+
+        printf("Device speed grade = %dMHz.\n", uiDevSpeed);
+}
+

@@ -1,0 +1,10 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=win32
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,\u672C\u5730/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,\u672C\u5730/name=\u672C\u5730
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,\u672C\u5730/os=win32
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:MCP_CORE0,org.eclipse.launchbar.core.descriptorType.default\:MCP_CORE0_226,org.eclipse.launchbar.core.descriptorType.default\:MCP_CORE1,org.eclipse.launchbar.core.descriptorType.default\:EC1900_APP_Core-TestPort2PortWithSwitch,org.eclipse.launchbar.core.descriptorType.default\:EC1900_APP_Core,org.eclipse.launchbar.core.descriptorType.default\:EC8100_APP_Core,org.eclipse.launchbar.core.descriptorType.default\:ES8100_APP_Core,org.eclipse.launchbar.core.descriptorType.default\:MCP_CORE7
+eclipse.preferences.version=1
+org.eclipse.launchbar.core.descriptorType.default\:EC1900_APP_Core-TestPort2PortWithSwitch/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:EC1900_APP_Core-TestPort2PortWithSwitch/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
